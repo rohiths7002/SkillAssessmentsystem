@@ -1,0 +1,367 @@
+﻿@page
+@model IndexModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>SkillCert - Online Skill Assessment</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            color: #111827;
+        }
+
+        /* NAVBAR */
+
+        .navbar {
+            background: #172554;
+            color: white;
+            padding: 18px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .nav-links a:hover {
+            color: #93c5fd;
+        }
+
+        /* HERO */
+
+        .hero {
+            min-height: 460px;
+            padding: 75px 10%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 50px;
+            background: #f4f7fb;
+        }
+
+        .hero-content {
+            max-width: 600px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            line-height: 1.15;
+            color: #172554;
+            margin-bottom: 25px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            line-height: 1.7;
+            color: #4b5563;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 13px 24px;
+            border-radius: 7px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .primary-btn {
+            background: #2563eb;
+            color: white;
+        }
+
+        .secondary-btn {
+            border: 2px solid #2563eb;
+            color: #2563eb;
+            background: white;
+        }
+
+        /* INFO CARD */
+
+        .info-card {
+            background: white;
+            width: 310px;
+            padding: 35px;
+            border-radius: 18px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        }
+
+        .info-card h2 {
+            color: #2563eb;
+            text-align: center;
+            margin-bottom: 18px;
+        }
+
+        .info-card p {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .info-card ul {
+            list-style: none;
+            line-height: 2;
+            color: #374151;
+        }
+
+        /* FEATURES */
+
+        .features {
+            padding: 65px 10%;
+            background: #eef2ff;
+            text-align: center;
+        }
+
+        .features h2 {
+            color: #172554;
+            font-size: 32px;
+            margin-bottom: 35px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 35px 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.06);
+        }
+
+        .feature-icon {
+            font-size: 35px;
+            margin-bottom: 15px;
+        }
+
+        .feature-card h3 {
+            color: #2563eb;
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        /* FOOTER */
+
+        .footer {
+            background: #172554;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        @@media (max-width: 800px) {
+
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                padding: 50px 25px;
+            }
+
+            .hero h1 {
+                font-size: 38px;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .info-card {
+                width: 100%;
+                max-width: 350px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            SkillCert
+        </div>
+
+        <div class="nav-links">
+
+            <a href="/Index">Home</a>
+
+            <a href="/Dashboard">Dashboard</a>
+
+            <a href="/Assessments">Assessments</a>
+
+            <a href="/MyCertificates">Certificates</a>
+
+            <a href="/Login">Login</a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <h1>
+                Test Your Skills.<br />
+                Earn Your Certificate.
+            </h1>
+
+            <p>
+                Improve your knowledge through online skill assessments,
+                check your performance and earn certificates based on
+                your results.
+            </p>
+
+            <a href="/Assessments" class="btn primary-btn">
+                Start Assessment
+            </a>
+
+            <a href="/MyCertificates" class="btn secondary-btn">
+                Verify Certificate
+            </a>
+
+        </div>
+
+
+        <div class="info-card">
+
+            <h2>SkillCert</h2>
+
+            <p>
+                Online Skill Assessment & Certification Platform
+            </p>
+
+            <ul>
+                <li>✓ Skill-Based Tests</li>
+                <li>✓ Instant Results</li>
+                <li>✓ Performance Tracking</li>
+                <li>✓ Digital Certificates</li>
+            </ul>
+
+        </div>
+
+    </section>
+
+
+    <!-- FEATURES -->
+
+    <section class="features">
+
+        <h2>What We Provide</h2>
+
+        <div class="feature-grid">
+
+            <div class="feature-card">
+
+                <div class="feature-icon">📝</div>
+
+                <h3>Online Assessments</h3>
+
+                <p>
+                    Take skill-based MCQ assessments anytime
+                    and anywhere.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">📊</div>
+
+                <h3>Instant Results</h3>
+
+                <p>
+                    Get your score and performance immediately
+                    after completing your assessment.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">🏆</div>
+
+                <h3>Digital Certificates</h3>
+
+                <p>
+                    Earn digital certificates after successfully
+                    completing an assessment.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FOOTER -->
+
+    <footer class="footer">
+
+        <p>
+            © 2026 SkillCert. All Rights Reserved.
+        </p>
+
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,328 @@
+@page
+@model SkillAssessmentSystem.Pages.MyResultsModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>My Results - SkillCert</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #111827;
+        }
+
+        .navbar {
+            background: #172554;
+            color: white;
+            padding: 18px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-links a:hover {
+            color: #93c5fd;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .page-title h1 {
+            color: #172554;
+            margin-bottom: 10px;
+        }
+
+        .page-title p {
+            color: #6b7280;
+        }
+
+        .result-card {
+            background: white;
+            padding: 30px;
+            margin-bottom: 25px;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        }
+
+        .result-card h2 {
+            color: #2563eb;
+            margin-top: 0;
+        }
+
+        .details {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .detail-box {
+            background: #f3f4f6;
+            padding: 18px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .detail-box strong {
+            display: block;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .detail-box p {
+            margin: 0;
+            font-size: 20px;
+            font-weight: bold;
+            color: #172554;
+        }
+
+        .passed {
+            color: #15803d !important;
+        }
+
+        .failed {
+            color: #dc2626 !important;
+        }
+
+        .certificate-btn {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 13px 22px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .certificate-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .empty {
+            background: white;
+            padding: 40px;
+            text-align: center;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 20px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 7px;
+        }
+
+        @@media (max-width: 800px) {
+
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .details {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .container {
+                margin: 25px auto;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="navbar">
+
+        <div class="logo">
+            SkillCert
+        </div>
+
+        <div class="nav-links">
+
+            <a href="/Index">Home</a>
+
+            <a href="/Dashboard">Dashboard</a>
+
+            <a href="/Assessments">Assessments</a>
+
+            <a href="/MyResults">My Results</a>
+
+            <a href="/MyCertificates">Certificates</a>
+
+        </div>
+
+    </div>
+
+
+    <div class="container">
+
+        <div class="page-title">
+
+            <h1>My Assessment Results</h1>
+
+            <p>
+                View your assessment performance and certificates.
+            </p>
+
+        </div>
+
+
+        @if (Model.Results.Count == 0)
+        {
+            <div class="empty">
+
+                <h2>No Results Found</h2>
+
+                <p>
+                    You have not completed any assessment yet.
+                </p>
+
+                <a href="/Assessments" class="back-btn">
+                    Take an Assessment
+                </a>
+
+            </div>
+        }
+        else
+        {
+
+            @foreach (var result in Model.Results)
+            {
+
+                var percentage =
+                    result.TotalQuestions > 0
+                    ? (result.Score * 100.0 / result.TotalQuestions)
+                    : 0;
+
+                var passed =
+                    result.Score >=
+                    (result.TotalQuestions / 2);
+
+                <div class="result-card">
+
+                    <h2>
+                        @result.Assessment?.Title
+                    </h2>
+
+
+                    <div class="details">
+
+                        <div class="detail-box">
+
+                            <strong>Score</strong>
+
+                            <p>
+                                @result.Score / @result.TotalQuestions
+                            </p>
+
+                        </div>
+
+
+                        <div class="detail-box">
+
+                            <strong>Percentage</strong>
+
+                            <p>
+                                @percentage.ToString("0.##")%
+                            </p>
+
+                        </div>
+
+
+                        <div class="detail-box">
+
+                            <strong>Status</strong>
+
+                            <p class="@(passed ? "passed" : "failed")">
+
+                                @(passed ? "PASSED" : "FAILED")
+
+                            </p>
+
+                        </div>
+
+
+                        <div class="detail-box">
+
+                            <strong>Completed On</strong>
+
+                            <p style="font-size:16px;">
+
+                                @result.CompletedAt.ToString("dd-MM-yyyy")
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    @if (passed)
+                    {
+                        <a href="/MyCertificates"
+                           class="certificate-btn">
+
+                            View My Certificate
+
+                        </a>
+                    }
+
+                </div>
+            }
+
+        }
+
+    </div>
+
+</body>
+</html>

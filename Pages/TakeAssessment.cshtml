@@ -1,0 +1,506 @@
+@page
+@model SkillAssessmentSystem.Pages.TakeAssessmentModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>Take Assessment - SkillCert</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            color: #111827;
+        }
+
+        /* NAVBAR */
+
+        .navbar {
+            background: #111827;
+            color: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-links a:hover {
+            color: #60a5fa;
+        }
+
+        /* CONTAINER */
+
+        .container {
+            max-width: 900px;
+            margin: 45px auto;
+            padding: 20px;
+        }
+
+        .assessment-header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.07);
+            margin-bottom: 25px;
+        }
+
+        .assessment-header h1 {
+            color: #172554;
+            margin-bottom: 12px;
+        }
+
+        .assessment-header p {
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        /* QUESTIONS */
+
+        .question-card {
+            background: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        }
+
+        .question-card h3 {
+            color: #172554;
+            margin-bottom: 18px;
+        }
+
+        .option {
+            display: block;
+            padding: 12px;
+            margin: 8px 0;
+            background: #f3f4f6;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        .option:hover {
+            background: #e0e7ff;
+        }
+
+        .option input {
+            margin-right: 10px;
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            background: #1d4ed8;
+        }
+
+        /* RESULT */
+
+        .result-box {
+            background: white;
+            padding: 40px;
+            text-align: center;
+            border-radius: 18px;
+            box-shadow: 0 7px 25px rgba(0,0,0,0.08);
+        }
+
+        .passed {
+            border-top: 7px solid #16a34a;
+        }
+
+        .failed {
+            border-top: 7px solid #dc2626;
+        }
+
+        .result-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+
+        .result-box h1 {
+            margin-bottom: 15px;
+        }
+
+        .passed h1 {
+            color: #16a34a;
+        }
+
+        .failed h1 {
+            color: #dc2626;
+        }
+
+        .score {
+            font-size: 30px;
+            font-weight: bold;
+            color: #172554;
+            margin: 20px 0;
+        }
+
+        .percentage {
+            font-size: 18px;
+            color: #6b7280;
+            margin-bottom: 25px;
+        }
+
+        .certificate-message {
+            background: #fef3c7;
+            padding: 18px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            color: #92400e;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 22px;
+            margin: 6px;
+            border-radius: 7px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .success {
+            background: #16a34a;
+            color: white;
+        }
+
+        .secondary {
+            background: #e5e7eb;
+            color: #111827;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        @@media (max-width: 700px) {
+
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .container {
+                margin: 25px auto;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+
+    <div class="navbar">
+
+        <div class="logo">
+            SkillCert
+        </div>
+
+        <div class="nav-links">
+
+            <a href="/Dashboard">Dashboard</a>
+
+            <a href="/Assessments">Assessments</a>
+
+            <a href="/MyResults">My Results</a>
+
+            <a href="/MyCertificates">Certificates</a>
+
+        </div>
+
+    </div>
+
+
+    <div class="container">
+
+        @if (!Model.Submitted)
+        {
+            <!-- ASSESSMENT -->
+
+            <div class="assessment-header">
+
+                <h1>
+                    @Model.Assessment?.Title
+                </h1>
+
+                <p>
+                    @Model.Assessment?.Description
+                </p>
+
+                <br />
+
+                <p>
+                    <strong>
+                        Total Questions:
+                    </strong>
+                    @Model.Assessment?.Questions.Count
+                </p>
+
+            </div>
+
+
+            <form method="post">
+
+                @if (Model.Assessment?.Questions != null)
+                {
+                    int number = 1;
+
+                    foreach (var question in Model.Assessment.Questions)
+                    {
+                        <div class="question-card">
+
+                            <h3>
+                                @number. @question.QuestionText
+                            </h3>
+
+                            <label class="option">
+                                <input type="radio"
+                                       name="question_@question.QuestionId"
+                                       value="@question.OptionA" />
+
+                                @question.OptionA
+                            </label>
+
+                            <label class="option">
+                                <input type="radio"
+                                       name="question_@question.QuestionId"
+                                       value="@question.OptionB" />
+
+                                @question.OptionB
+                            </label>
+
+                            <label class="option">
+                                <input type="radio"
+                                       name="question_@question.QuestionId"
+                                       value="@question.OptionC" />
+
+                                @question.OptionC
+                            </label>
+
+                            <label class="option">
+                                <input type="radio"
+                                       name="question_@question.QuestionId"
+                                       value="@question.OptionD" />
+
+                                @question.OptionD
+                            </label>
+
+                        </div>
+
+                        number++;
+                    }
+                }
+
+                <button type="submit"
+                        class="submit-btn">
+
+                    Submit Assessment
+
+                </button>
+
+            </form>
+        }
+        else
+        {
+            <!-- RESULT -->
+
+            @if (Model.Passed)
+            {
+                <div class="result-box passed">
+
+                    <div class="result-icon">
+                        🎉
+                    </div>
+
+                    <h1>
+                        Assessment Passed!
+                    </h1>
+
+                    <div class="score">
+
+                        Score:
+                        @Model.Score /
+                        @Model.Assessment?.Questions.Count
+
+                    </div>
+
+                    <div class="percentage">
+
+                        @{
+                            double percentage =
+                                Model.Assessment?.Questions.Count > 0
+                                ? (double)Model.Score /
+                                  Model.Assessment.Questions.Count * 100
+                                : 0;
+                        }
+
+                        Percentage:
+                        @percentage.ToString("0.##")%
+
+                    </div>
+
+                    <div class="certificate-message">
+
+                        🏆 Congratulations!
+
+                        <br />
+
+                        You have successfully passed this assessment
+                        and earned a certificate.
+
+                    </div>
+
+                    <a href="/MyCertificates"
+                       class="btn success">
+
+                        🏆 View My Certificate
+
+                    </a>
+
+                    <a href="/MyResults"
+                       class="btn primary">
+
+                        📊 View My Results
+
+                    </a>
+
+                    <a href="/Dashboard"
+                       class="btn secondary">
+
+                        Dashboard
+
+                    </a>
+
+                </div>
+            }
+            else
+            {
+                <div class="result-box failed">
+
+                    <div class="result-icon">
+                        ❌
+                    </div>
+
+                    <h1>
+                        Assessment Not Passed
+                    </h1>
+
+                    <div class="score">
+
+                        Score:
+                        @Model.Score /
+                        @Model.Assessment?.Questions.Count
+
+                    </div>
+
+                    <div class="percentage">
+
+                        @{
+                            double percentage =
+                                Model.Assessment?.Questions.Count > 0
+                                ? (double)Model.Score /
+                                  Model.Assessment.Questions.Count * 100
+                                : 0;
+                        }
+
+                        Percentage:
+                        @percentage.ToString("0.##")%
+
+                    </div>
+
+                    <div class="certificate-message">
+
+                        You need at least 50% to pass
+                        this assessment.
+
+                        <br />
+
+                        Keep practicing and try again!
+
+                    </div>
+
+                    <a href="/Assessments"
+                       class="btn primary">
+
+                        🔄 Try Another Assessment
+
+                    </a>
+
+                    <a href="/MyResults"
+                       class="btn secondary">
+
+                        📊 View My Results
+
+                    </a>
+
+                    <a href="/Dashboard"
+                       class="btn secondary">
+
+                        Dashboard
+
+                    </a>
+
+                </div>
+            }
+        }
+
+    </div>
+
+</body>
+</html>

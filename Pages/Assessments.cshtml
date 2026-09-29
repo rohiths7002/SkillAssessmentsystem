@@ -1,0 +1,180 @@
+@page
+@model SkillAssessmentSystem.Pages.AssessmentsModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Assessments - SkillCert</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+        }
+
+        .navbar {
+            background: #111827;
+            color: white;
+            padding: 18px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .back {
+            color: white;
+            text-decoration: none;
+            background: #2563eb;
+            padding: 9px 18px;
+            border-radius: 6px;
+        }
+
+        .container {
+            padding: 40px 60px;
+        }
+
+        h1 {
+            color: #111827;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            margin-bottom: 30px;
+        }
+
+        .assessment-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .assessment-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .assessment-card h2 {
+            color: #2563eb;
+            margin-bottom: 12px;
+        }
+
+        .assessment-card p {
+            color: #6b7280;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .info {
+            margin: 15px 0;
+            color: #374151;
+        }
+
+        .start-btn {
+            display: inline-block;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+        }
+
+        .empty {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            color: #6b7280;
+        }
+
+        @@media (max-width: 800px) {
+            .assessment-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+    <div class="logo">SkillCert</div>
+
+    <div>
+        <a href="/Index" class="back">Home</a>
+        <a href="/Dashboard" class="back">Dashboard</a>
+    </div>
+</nav>
+    <div class="container">
+
+        <h1>Available Assessments</h1>
+
+        <p class="subtitle">
+            Choose an assessment and test your skills.
+        </p>
+
+        @if (Model.Assessments.Count == 0)
+        {
+            <div class="empty">
+                No assessments are available yet.
+            </div>
+        }
+        else
+        {
+            <div class="assessment-grid">
+
+                @foreach (var assessment in Model.Assessments)
+                {
+                    <div class="assessment-card">
+
+                        <h2>@assessment.Title</h2>
+
+                        <p>
+                            @assessment.Description
+                        </p>
+
+                        <div class="info">
+                            ⏱ Duration:
+                            @assessment.DurationMinutes minutes
+                        </div>
+
+                        <div class="info">
+                            📝 Questions:
+                            @assessment.TotalQuestions
+                        </div>
+
+                        <a class="start-btn"
+                           href="/TakeAssessment?id=@assessment.AssessmentId">
+                            Start Assessment
+                        </a>
+
+                    </div>
+                }
+
+            </div>
+        }
+
+    </div>
+
+</body>
+</html>
