@@ -5,10 +5,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add Razor Pages
 builder.Services.AddRazorPages();
+
 builder.Services.AddSession();
-// Add Database Connection
+
+// Add SQLite Database Connection
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(
+    options.UseSqlite(
         builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
@@ -23,7 +25,9 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseRouting();
+
 app.UseSession();
+
 app.UseAuthorization();
 
 app.MapRazorPages();
