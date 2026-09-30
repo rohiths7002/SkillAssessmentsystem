@@ -23,9 +23,10 @@ namespace SkillAssessmentSystem.Pages
 
         public bool Passed { get; set; }
 
+        public int TotalQuestions => Assessment?.Questions.Count ?? 0;
+
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            // Check whether student is logged in
             int? studentId = HttpContext.Session.GetInt32("StudentId");
 
             if (studentId == null)
@@ -33,7 +34,6 @@ namespace SkillAssessmentSystem.Pages
                 return RedirectToPage("/Login");
             }
 
-            // Load assessment with questions
             Assessment = await _context.Assessments
                 .Include(a => a.Questions)
                 .FirstOrDefaultAsync(a => a.AssessmentId == id);
@@ -48,7 +48,6 @@ namespace SkillAssessmentSystem.Pages
 
         public async Task<IActionResult> OnPostAsync(int id)
         {
-            // Get logged-in student's ID
             int? studentId = HttpContext.Session.GetInt32("StudentId");
 
             if (studentId == null)
@@ -56,7 +55,6 @@ namespace SkillAssessmentSystem.Pages
                 return RedirectToPage("/Login");
             }
 
-            // Load assessment with questions
             Assessment = await _context.Assessments
                 .Include(a => a.Questions)
                 .FirstOrDefaultAsync(a => a.AssessmentId == id);
@@ -66,13 +64,11 @@ namespace SkillAssessmentSystem.Pages
                 return NotFound();
             }
 
-            // Calculate score
             Score = 0;
 
             foreach (var question in Assessment.Questions)
             {
                 string fieldName = $"question_{question.QuestionId}";
-
                 string? selectedAnswer = Request.Form[fieldName];
 
                 if (!string.IsNullOrEmpty(selectedAnswer) &&
@@ -82,8 +78,11 @@ namespace SkillAssessmentSystem.Pages
                 }
             }
 
-            // Check pass/fail status
-            Passed = Score >= (Assessment.Questions.Count / 2.0);
+            int totalQuestions = Assessment.Questions.Count;
+
+            // 50% or above = Pass
+            Passed = totalQuestions > 0 &&
+                     Score >= Math.Ceiling(totalQuestions / 2.0);
 
             // Save result
             var result = new Result
@@ -91,28 +90,25 @@ namespace SkillAssessmentSystem.Pages
                 StudentId = studentId.Value,
                 AssessmentId = Assessment.AssessmentId,
                 Score = Score,
-                TotalQuestions = Assessment.Questions.Count,
+                TotalQuestions = totalQuestions,
                 CompletedAt = DateTime.Now
             };
 
             _context.Results.Add(result);
 
-            // Create certificate only when passed
+            // Generate certificate when passed
             if (Passed)
             {
+                string certificateNumber =
+                    $"CERT-{DateTime.Now:yyyyMMddHHmmss}-{studentId.Value}";
+
                 var certificate = new Certificate
                 {
-                    CertificateNumber =
-                        "CERT-" + DateTime.Now.ToString("yyyyMMddHHmmss"),
-
+                    CertificateNumber = certificateNumber,
                     StudentId = studentId.Value,
-
                     AssessmentId = Assessment.AssessmentId,
-
                     Score = Score,
-
-                    TotalQuestions = Assessment.Questions.Count,
-
+                    TotalQuestions = totalQuestions,
                     IssuedDate = DateTime.Now
                 };
 
