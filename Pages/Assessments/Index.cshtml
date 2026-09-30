@@ -1,0 +1,37 @@
+@page
+@model SkillAssessmentSystem.Pages.Assessments.IndexModel
+
+<h1>Available Assessments</h1>
+
+@if (Model.Assessments.Count == 0)
+{
+    <div>
+        <h3>No assessments are available yet.</h3>
+        <p>Please check again later.</p>
+    </div>
+}
+else
+{
+    foreach (var assessment in Model.Assessments)
+    {
+        <div>
+            <h2>@assessment.Title</h2>
+
+            <p>@assessment.Description</p>
+
+            <p>
+                <strong>Duration:</strong>
+                @assessment.DurationMinutes minutes
+            </p>
+
+            <p>
+                <strong>Questions:</strong>
+                @assessment.TotalQuestions
+            </p>
+
+            <a href="/Assessments/Take?assessmentId=@assessment.AssessmentId">
+                Start Assessment
+            </a>
+        </div>
+    }
+}
