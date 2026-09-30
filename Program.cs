@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using SkillAssessmentSystem.Data;
 using SkillAssessmentSystem.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages();
@@ -12,12 +13,19 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 var app = builder.Build();
 
-// Apply database migrations automatically
-// Seed sample assessment and questions
+
+// ===============================
+// DATABASE MIGRATION + SEED DATA
+// ===============================
+
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
+    // Apply pending migrations
+    db.Database.Migrate();
+
+    // Seed assessment if database is empty
     if (!db.Assessments.Any())
     {
         var assessment = new Assessment
@@ -31,6 +39,11 @@ using (var scope = app.Services.CreateScope())
 
         db.Assessments.Add(assessment);
         db.SaveChanges();
+
+
+        // ===============================
+        // QUESTIONS
+        // ===============================
 
         var questions = new List<Question>
         {
@@ -95,7 +108,11 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// Configure HTTP request pipeline
+
+// ===============================
+// HTTP REQUEST PIPELINE
+// ===============================
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
@@ -105,7 +122,9 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseRouting();
+
 app.UseSession();
+
 app.UseAuthorization();
 
 app.MapRazorPages();
